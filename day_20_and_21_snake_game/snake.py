@@ -4,13 +4,21 @@ class Snake:
     def __init__(self):
         self.snake_body = []
         self.current_direction = "right"
-        for i in range(3):
-            turtle = Turtle(shape="square")
-            turtle.penup()
-            turtle.goto(0 - i * 20, 0)
-            turtle.color("white")
-            self.snake_body.append(turtle)
+        self.create_snake()
         self.head = self.snake_body[0]
+
+    def create_snake(self):
+        for i in range(3):
+            self.add_segment((0 - i * 20, 0))
+    def add_segment(self, position):
+        turtle = Turtle(shape="square")
+        turtle.penup()
+        turtle.goto(position)
+        turtle.color("white")
+        self.snake_body.append(turtle)
+
+    def extend(self):
+        self.add_segment(self.snake_body[-1].position())
 
     def update_body_position(self):
         for seg_num in range(len(self.snake_body) - 1, 0, -1):
@@ -36,6 +44,13 @@ class Snake:
         if self.current_direction != "up":
             self.head.setheading(270)
             self.current_direction = "down"
+
+    def reset(self):
+        for seg in self.snake_body:
+            seg.reset()
+        self.snake_body.clear()
+        self.create_snake()
+        self.head = self.snake_body[0]
 
     def rotate_left(self):
         if self.current_direction != "right":
